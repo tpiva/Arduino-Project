@@ -1,6 +1,7 @@
 package com.pos.agenda.client;
 
 import java.util.ArrayList;
+
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
@@ -14,5 +15,7 @@ public interface AgendaService extends RemoteService{
 	void atualizar(Contato contato) throws IllegalArgumentException;
 
 	void remover(Contato contato) throws IllegalArgumentException;
+
+	Contato obter(String nome) throws IllegalArgumentException;;
 
 }

@@ -1,15 +1,12 @@
 package com.pos.agenda.client;
 
 import java.util.ArrayList;
-
-import javax.swing.text.TabableView;
+import java.util.List;
 
 import com.google.gwt.cell.client.ButtonCell;
 import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.Style.BorderStyle;
-import com.google.gwt.dom.client.Style.VerticalAlign;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.cellview.client.CellTable;
@@ -20,7 +17,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DockPanel;
-import com.google.gwt.user.client.ui.HasVerticalAlignment.VerticalAlignmentConstant;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -45,11 +41,11 @@ public class Agenda implements EntryPoint {
 	private TextBox textoTelefone;
 	private TextBox textoCategoria;
 
-	private ArrayList<Contato> listaContato;
+	private List<Contato> listaContato;
 	private CellTable<Contato> tabelaContatos;
 
 	private int start = 0;
-	private int length = 10;
+	private int length = 0;
 
 	/**
 	 * This is the entry point method.
@@ -81,15 +77,35 @@ public class Agenda implements EntryPoint {
 	}
 
 	private HorizontalPanel criarCampoBuscar() {
+		final TextBox textoBuscar = new TextBox();
 		Label labelNomeContato = new Label("Nome do contato:");
-		TextBox textoBuscar = new TextBox();
 		Button botaoProcurar = new Button("Procurar");
+		Button botatoTodosContatos = new Button("Todos os contatos");
 		
 		HorizontalPanel painelHorizontal = new HorizontalPanel();
+		painelHorizontal.setWidth("auto");
+		painelHorizontal.setSpacing(10);
 		
+		botaoProcurar.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				obterContato(textoBuscar.getText());		
+			}
+		});
+		
+		botatoTodosContatos.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				atualizarTabela(null);	
+			}
+		});
+
 		painelHorizontal.add(labelNomeContato);
 		painelHorizontal.add(textoBuscar);
 		painelHorizontal.add(botaoProcurar);
+		painelHorizontal.add(botatoTodosContatos);
+		
+		painelHorizontal.setCellHorizontalAlignment(labelNomeContato, HorizontalPanel.ALIGN_JUSTIFY);
 		
 		return painelHorizontal;
 		
@@ -148,7 +164,7 @@ public class Agenda implements EntryPoint {
 					
 					@Override
 					public void onSuccess(Void result) {
-						atualizarTabela();
+						atualizarTabela(null);
 						limparDados();
 					}
 				});
@@ -178,7 +194,7 @@ public class Agenda implements EntryPoint {
 		
 		tabelaContatos.setWidth("100%");
 
-		atualizarTabela();
+		atualizarTabela(null);
 
 		return tabelaContatos;
 	}
@@ -186,15 +202,17 @@ public class Agenda implements EntryPoint {
 	private VerticalPanel criarCampoInserirAtualizar() {
 		VerticalPanel painelVertical = new VerticalPanel();
 		HorizontalPanel painelHorizontal = new HorizontalPanel();
-		painelHorizontal.setSpacing(10);
+		painelHorizontal.setSpacing(7);
 		painelVertical.setWidth("100%");
+		painelVertical.setTitle("Criar/Atualizar contato");
 		
 		Label labelNome = new Label("Nome:");
 		Label labelEmail = new Label("Email:");
 		Label labelTelefone = new Label("Telefone:");
 		Label labelCategoria = new Label("Categoria:");
-		Button botaoAdicionar = new Button("Adicionar");
+		Button botaoAdicionar = new Button("Criar");
 		Button botaoEditar = new Button("Editar");	
+		Button botaoLimpar = new Button("Limpar");
 		
 		//eventos dos botões
 		botaoAdicionar.addClickHandler(new ClickHandler() {
@@ -213,6 +231,14 @@ public class Agenda implements EntryPoint {
 			}
 		});
 		
+		botaoLimpar.addClickHandler(new ClickHandler() {
+
+			@Override
+			public void onClick(ClickEvent event) {
+				limparDados();
+			}
+		});
+		
 		
 		textoNome = new TextBox();
 		textoEmail = new TextBox();
@@ -228,12 +254,12 @@ public class Agenda implements EntryPoint {
 		painelVertical.add(labelCategoria);
 		painelVertical.add(textoCategoria);
 		
-		painelHorizontal.setHorizontalAlignment(HorizontalPanel.ALIGN_RIGHT);
-		painelHorizontal.setVerticalAlignment(VerticalPanel.ALIGN_MIDDLE);
-		
 		painelHorizontal.add(botaoAdicionar);
 		painelHorizontal.add(botaoEditar);
+		painelHorizontal.add(botaoLimpar);
 		
+		painelHorizontal.setHorizontalAlignment(HorizontalPanel.ALIGN_RIGHT);
+		painelHorizontal.setVerticalAlignment(VerticalPanel.ALIGN_MIDDLE);
 //		painelVertical.setHorizontalAlignment(HorizontalPanel.ALIGN_CENTER);
 //		painelVertical.getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
 		
@@ -242,15 +268,14 @@ public class Agenda implements EntryPoint {
 		return painelVertical;
 	}
 	
-	private void atualizarTabela() {
+	private void atualizarTabela(final Contato contatoEncontrado) {
 		dataProvider = new AsyncDataProvider<Contato>() {
 			@Override
 			protected void onRangeChanged(HasData<Contato> display) {
+					start = display.getVisibleRange().getStart();
+					length = display.getVisibleRange().getLength();
 				
-				start = display.getVisibleRange().getStart();
-				
-				length = display.getVisibleRange().getLength();
-				// the async call
+				// the async call 
 				asyncContato = new AsyncCallback<ArrayList<Contato>>() {
 					@Override
 					public void onFailure(Throwable caught) {
@@ -259,7 +284,14 @@ public class Agenda implements EntryPoint {
 					@Override
 					public void onSuccess(ArrayList<Contato> result) {
 						listaContato = result;
-						updateRowCount(listaContato.size()+start, true);
+						if(contatoEncontrado != null) {
+							//limpa a lista e adiciona o contato encontrado, para apenas exibi-lo
+							listaContato.clear();
+							listaContato.add(contatoEncontrado);
+							start = 0;
+						}
+						//para evitar o "layout" de carregamento infinito realizar a verificao de opcao == 1
+						updateRowCount(listaContato.size() + start, true);
 						updateRowData(start, listaContato);
 					}
 				};
@@ -289,13 +321,14 @@ public class Agenda implements EntryPoint {
 			service.inserir(novoContato, new AsyncCallback<Void>() {
 				@Override
 				public void onFailure(Throwable caught) {
+					Window.alert("Não foi possível salvar os dados devido ao erro: " + caught.getMessage() + " no servidor");
 				}
 				
 				@Override
 				public void onSuccess(Void result) {
 					Window.alert("Dados salvos com sucesso!");
 					limparDados();
-					atualizarTabela();
+					atualizarTabela(null);
 				}
 			});
 		} else {
@@ -312,18 +345,40 @@ public class Agenda implements EntryPoint {
 			service.atualizar(novoContato, new AsyncCallback<Void>() {
 				@Override
 				public void onFailure(Throwable caught) {
+					Window.alert("Não foi possível atualizar os dados devido ao erro: " + caught.getMessage() + " no servidor");
 				}
 				
 				@Override
 				public void onSuccess(Void result) {
-					Window.alert("Dados salvos com sucesso!");
+					Window.alert("Dados atualizados com sucesso!");
 					limparDados();
-					atualizarTabela();
+					atualizarTabela(null);
 				}
 			});
 		} else {
 			Window.alert("Todos os dados devem ser preenchidos");
 		}
 	}
+	
+	private void obterContato(final String nome) {
+		service.obter(nome, new AsyncCallback<Contato>() {
+			@Override
+			public void onFailure(Throwable caught) {
+				Window.alert("Nenhum contato com o nome de: " + nome + " foi encotrado!");
+			}
+
+			@Override
+			public void onSuccess(Contato result) {
+				if(result == null) {
+					//mostra uma mensagem informando que nenum contato foi encontrado e mostra todos os contatos existentes.
+					Window.alert("Nenhum contato com o nome de: " + nome + " foi encotrado!");
+				}
+				
+				atualizarTabela(result);
+			}
+		});
+	}
+	
+	
 	
 }

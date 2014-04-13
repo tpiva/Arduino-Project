@@ -13,4 +13,6 @@ public interface AgendaServiceAsync {
 	void atualizar(Contato contato,AsyncCallback<Void> callback) throws IllegalArgumentException;	
 	
 	void remover(Contato contato,AsyncCallback<Void> callback) throws IllegalArgumentException;	
+	
+	void obter(String nome,AsyncCallback<Contato> callback) throws IllegalArgumentException;	
 }
