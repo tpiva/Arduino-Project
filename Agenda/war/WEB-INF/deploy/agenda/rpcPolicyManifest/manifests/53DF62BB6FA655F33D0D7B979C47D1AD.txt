@@ -1,0 +1,2 @@
+serviceClass: com.pos.agenda.client.AgendaService
+path: CFAE8D33EB56A3B2355A229E74EA455A.gwt.rpc
