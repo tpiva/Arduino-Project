@@ -16,6 +16,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
@@ -156,18 +157,13 @@ public class Agenda implements EntryPoint {
 			@Override
 			public void update(int index, Contato contato, String valor) {
 				final Contato contatoRemocao = contato;
-				service.remover(contatoRemocao, new AsyncCallback<Void>() {
-					
-					@Override
-					public void onFailure(Throwable caught) {
-					}
-					
-					@Override
-					public void onSuccess(Void result) {
-						atualizarTabela(null);
-						limparDados();
-					}
-				});
+				final DialogBox dialogBox = criarCaixaDialogo(contatoRemocao);
+			    dialogBox.setGlassEnabled(true);
+			    dialogBox.setAnimationEnabled(true);
+				
+				dialogBox.center();
+	            dialogBox.show();
+				
 			}
 		});
 
@@ -266,6 +262,58 @@ public class Agenda implements EntryPoint {
 		painelVertical.add(painelHorizontal);
 		
 		return painelVertical;
+	}
+	
+	private DialogBox criarCaixaDialogo(final Contato contato) { 
+		final DialogBox dialogBox = new DialogBox();
+		dialogBox.setText("Deletar");
+
+		// Create a table to layout the content
+		VerticalPanel conteudoDialogo = new VerticalPanel();
+		HorizontalPanel tituloDialogo = new HorizontalPanel();
+		HorizontalPanel botoes = new HorizontalPanel();
+		botoes.setSpacing(10);
+		botoes.setHorizontalAlignment(HorizontalPanel.ALIGN_CENTER);
+		
+		Label titulo = new Label("Deseja deletar o contato: " + contato.getNome() + " ?");
+		tituloDialogo.add(titulo);
+		
+		conteudoDialogo.setSpacing(4);
+		dialogBox.setWidget(conteudoDialogo);
+
+		// Add a close button at the bottom of the dialog
+		Button botaoCancelar = new Button("Cancelar", new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				dialogBox.hide();
+			}
+		});
+
+		Button botaoDeletar = new Button("Deletar", new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				service.remover(contato, new AsyncCallback<Void>() {
+
+					@Override
+					public void onFailure(Throwable caught) {
+					}
+
+					@Override
+					public void onSuccess(Void result) {
+						atualizarTabela(null);
+						limparDados();
+						dialogBox.hide();
+					}
+				});
+			}
+		});
+		botoes.add(botaoCancelar);
+		botoes.add(botaoDeletar);
+	    
+		conteudoDialogo.add(tituloDialogo);
+		conteudoDialogo.add(botoes);
+		
+		conteudoDialogo.setCellHorizontalAlignment(botoes, HorizontalPanel.ALIGN_CENTER);
+	    // Return the dialog box
+	    return dialogBox;
 	}
 	
 	private void atualizarTabela(final Contato contatoEncontrado) {
