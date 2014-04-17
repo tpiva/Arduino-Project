@@ -380,7 +380,8 @@ public class Agenda implements EntryPoint {
 				}
 			});
 		} else {
-			Window.alert("Todos os dados devem ser preenchidos");
+			Window.alert(new StringBuilder().append("Verifique se: 1 - Todos os campos estão preenchidos\n2 - O campo nome tem apenas letras\n")
+					.append("3 - O campo e-mail esta no formato: xxxx@xxx.com.xx\n4 - O campo telefone possui apenas números\n").toString());
 		}
 	}
 	
