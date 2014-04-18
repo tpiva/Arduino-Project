@@ -7,6 +7,7 @@ import com.google.gwt.cell.client.ButtonCell;
 import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Style.BorderStyle;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.cellview.client.CellTable;
@@ -64,7 +65,6 @@ public class Agenda implements EntryPoint {
 	 */
 	private void criarLayout() {
 		DockPanel dockPanel = new DockPanel();
-	    dockPanel.setStyleName("cw-DockPanel");
 	    dockPanel.setSpacing(20);
 	    dockPanel.setHorizontalAlignment(DockPanel.ALIGN_CENTER);
 	    dockPanel.setWidth("100%");
@@ -84,6 +84,7 @@ public class Agenda implements EntryPoint {
 		Button botatoTodosContatos = new Button("Todos os contatos");
 		
 		HorizontalPanel painelHorizontal = new HorizontalPanel();
+		painelHorizontal.getElement().getStyle().setBorderStyle(BorderStyle.DOTTED);
 		painelHorizontal.setWidth("auto");
 		painelHorizontal.setSpacing(10);
 		
@@ -106,8 +107,8 @@ public class Agenda implements EntryPoint {
 		painelHorizontal.add(botaoProcurar);
 		painelHorizontal.add(botatoTodosContatos);
 		
-		painelHorizontal.setCellHorizontalAlignment(labelNomeContato, HorizontalPanel.ALIGN_JUSTIFY);
-		
+		painelHorizontal.setCellVerticalAlignment(labelNomeContato, VerticalPanel.ALIGN_MIDDLE);
+			
 		return painelHorizontal;
 		
 	}
@@ -116,6 +117,8 @@ public class Agenda implements EntryPoint {
 		listaContato = new ArrayList<Contato>(); 
 
 		tabelaContatos = new CellTable<Contato>();
+		
+		tabelaContatos.getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
 
 		TextColumn<Contato> nome = new TextColumn<Contato>() {
 			@Override
@@ -235,6 +238,10 @@ public class Agenda implements EntryPoint {
 			}
 		});
 		
+		painelHorizontal.setHorizontalAlignment(HorizontalPanel.ALIGN_RIGHT);
+		painelHorizontal.setVerticalAlignment(VerticalPanel.ALIGN_MIDDLE);
+		painelVertical.setHorizontalAlignment(HorizontalPanel.ALIGN_CENTER);
+		painelVertical.getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
 		
 		textoNome = new TextBox();
 		textoEmail = new TextBox();
@@ -250,14 +257,10 @@ public class Agenda implements EntryPoint {
 		painelVertical.add(labelCategoria);
 		painelVertical.add(textoCategoria);
 		
+		
 		painelHorizontal.add(botaoAdicionar);
 		painelHorizontal.add(botaoEditar);
 		painelHorizontal.add(botaoLimpar);
-		
-		painelHorizontal.setHorizontalAlignment(HorizontalPanel.ALIGN_RIGHT);
-		painelHorizontal.setVerticalAlignment(VerticalPanel.ALIGN_MIDDLE);
-//		painelVertical.setHorizontalAlignment(HorizontalPanel.ALIGN_CENTER);
-//		painelVertical.getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
 		
 		painelVertical.add(painelHorizontal);
 		
@@ -380,8 +383,8 @@ public class Agenda implements EntryPoint {
 				}
 			});
 		} else {
-			Window.alert(new StringBuilder().append("Verifique se: 1 - Todos os campos estão preenchidos\n2 - O campo nome tem apenas letras\n")
-					.append("3 - O campo e-mail esta no formato: xxxx@xxx.com.xx\n4 - O campo telefone possui apenas números\n").toString());
+			Window.alert(new StringBuilder().append("Verifique se:\n1 - Todos os campos est\u00e3o preenchidos\n2 - O campo nome tem apenas letras\n")
+					.append("3 - O campo e-mail esta no formato: xxxx@xxx.com.xx\n4 - O campo telefone possui apenas n\u00fameros\n").toString());
 		}
 	}
 	
