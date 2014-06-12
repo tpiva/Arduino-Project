@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pedido>
+  <id>15</id>
+  <nomePedido>Pedido1<nomePedido/>
+  <itemPedido>
+    <id>15</id>
+    <valor>6</valor> 
+  </itemPedido>
+  <itemPedido>
+    <id>33</id> 
+    <valor>5</valor> 
+  </itemPedido>
+  <itemPedido>
+    <id>42</id> 
+    <valor>7</valor> 
+  </itemPedido>
+  
+
+</pedido>
