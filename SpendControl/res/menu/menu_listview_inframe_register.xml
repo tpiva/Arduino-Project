@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item
+        android:id="@+id/edit_inframe_item"
+        android:title="@string/edit_item_inframe"/>
+    <item
+        android:id="@+id/delete_inframe_item"
+        android:title="@string/delete_item_inframe"/>
+</menu>

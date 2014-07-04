@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">SpendControl</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="button_inframe_name">Minha renda</string>
+    <string name="button_spends_monthly_name">Minhas despesas fixas</string>
+    <string name="button_spends_name">Minhas despesas</string>
+    <string name="button_about">Sobre</string>
+    <string name="text_inframe_1">Renda:</string>
+    <string name="text_title_inframe">Rendas</string>
+    <string name="button_finish">Salvar</string>
+    <string name="button_edit">Editar</string>
+	<string name="button_plus_inframe">+</string>
+	<string name="message_without_inframe_error">A renda deve ser preenchida para habilitar as opções de:\n1 - Minhas despesas fixas\n2 - Despesas</string>
+	<string name="sucess_save_inframe">Renda salva com sucesso!</string>
+	<string name="update_inframe">Uma renda já esta cadastrada deseja atualizá-la?</string>
+	<string name="ok">Ok</string>
+	<string name="cancel">Cancelar</string>
+	<string name="total_inframes_actual">Todas as minhas despesas</string>
+	<string name="content_image_trash">Deletar</string>
+	
+	<!-- Dialog for register on inframe -->
+	<string name="register_inframe">Cadastrar despesa</string>
+    <string name="hint_inframe">Despesa</string>
+    <string name="hint_inframe_value">Valor</string>
+    <string name="hint_duoDate_value">Data de vencimento</string>
+    
+    <!-- Menu inframe listview -->
+    <string name="edit_item_inframe">Editar</string>
+    <string name="delete_item_inframe">Deletar</string>
+</resources>

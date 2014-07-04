@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">SpendControl</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_inframe">InframeActivity</string>
+    <string name="title_activity_spends">SpendsActivity</string>
+    <string name="title_activity_spend_register">SpendRegisterActivity</string>
+    <string name="hint_duoDate_value">Duo Date</string>
+</resources>

@@ -1,0 +1,53 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical">
+    
+    <TableLayout 
+        android:id="@+id/table_header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:stretchColumns="0,1">
+        
+        <TableRow
+            android:id="@+id/table_row_1"
+            android:layout_width="fill_parent"
+            android:layout_height="30dp"
+        	android:background="#FFFFBB33"
+            android:gravity="center_horizontal" >
+            
+		    <TextView 
+		        android:id="@+id/text_tatal_inframe"
+		        android:layout_width="fill_parent"
+		        android:layout_height="30dp"
+		        android:gravity="center"
+		        android:layout_weight="1"  
+		        android:textStyle="italic"
+		        android:textColor="#404040"
+		        android:fontFamily="sans-serif-condensed"
+		        android:text="@string/total_inframes_actual"
+		        android:layout_column="0"/>
+            
+		    <Button
+		        android:id="@+id/button_add_spend"
+		        android:layout_width="wrap_content"
+		        android:layout_height="30dp"
+		        android:layout_weight="1"  
+		        android:gravity="center"
+		        android:paddingTop="2dp"
+		        android:paddingBottom="2dp"
+  	        	android:text="@string/button_plus_inframe" 
+  	        	android:layout_column="1"/>
+		    	               
+        </TableRow>
+        
+        <ListView
+            android:id="@+id/list_view_inframe"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" />
+                
+    </TableLayout>
+    
+</LinearLayout>  
