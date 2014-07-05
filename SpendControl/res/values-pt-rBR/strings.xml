@@ -30,4 +30,6 @@
     <!-- Menu inframe listview -->
     <string name="edit_item_inframe">Editar</string>
     <string name="delete_item_inframe">Deletar</string>
+	<string name="delete_spend_information">Deseja realmente deletar essa despesa?</string>
+	
 </resources>

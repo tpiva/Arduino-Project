@@ -36,7 +36,7 @@ public class DatabaseOperationsDAO {
 	
 	public static final String CREATE_TABLE_SPEND = "CREATE TABLE "
 			+ SPEND_TABLE + "(" + COLUMN_ID_SPENDS
-			+ " INTEGER PRIMARY KEY NOT NULL ," + COLUMN_NAME_OF_SPEND + " TEXT," + COLUMN_DESCRIPTION + " TEXT," 
+			+ " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL ," + COLUMN_NAME_OF_SPEND + " TEXT," + COLUMN_DESCRIPTION + " TEXT," 
 			+ COLUMN_SPEND_VALUE + " REAL," + COLUMN_CONSTANTLY_SPEND + " TEXT," + COLUMN_PAYDAY + " TEXT," 
 			+ COLUMN_ID_INFRAME + " INTEGER," + COLUMN_SPEND_DATE_REGISTER + " TEXT," + COLUMN_SPEND_DUO_DATE + " TEXT," + "FOREIGN KEY(" + COLUMN_ID_INFRAME + ") REFERENCES " 
 			+ INFRAME_TABLE + "(" + COLUMN_ID_INFRAME + ")" + ")";
@@ -67,13 +67,17 @@ public class DatabaseOperationsDAO {
 		dataBase.update(INFRAME_TABLE, values, COLUMN_ID_INFRAME + "=" + inframe.getId(), null);
 	}
 	
+	public void deleteSpend(Spends spends) {
+		dataBase.delete(SPEND_TABLE, COLUMN_ID_SPENDS + "=" + spends.getIdSpends(), null);
+	}
+	
 	public void updateSpend(Spends spends) {
 		ContentValues values = getContentValueSpends(spends);
 		dataBase.update(SPEND_TABLE, values, COLUMN_ID_SPENDS + "=" + spends.getIdSpends(), null);
 	}
 	
 	public void saveSpends(Spends spends) {
-		ContentValues values = getContentValueSpendsInsert(spends);
+		ContentValues values = getContentValueSpends2Insert(spends);
 		dataBase.insert(SPEND_TABLE, null, values);
 	}
 	
@@ -99,7 +103,7 @@ public class DatabaseOperationsDAO {
 		return values;
 	}
 	
-	private ContentValues getContentValueSpendsInsert(Spends spends) {
+	private ContentValues getContentValueSpends2Insert(Spends spends) {
 		ContentValues values = new ContentValues();
 		values.put(COLUMN_NAME_OF_SPEND, spends.getNameOfSpend());
 		values.put(COLUMN_DESCRIPTION, spends.getDescription());
@@ -109,6 +113,7 @@ public class DatabaseOperationsDAO {
 		values.put(COLUMN_ID_INFRAME, spends.getIdInframe());
 		values.put(COLUMN_SPEND_DATE_REGISTER, spends.getDateRegister());
 		values.put(COLUMN_SPEND_DUO_DATE, spends.getDuoDate());
+		
 		return values;
 	}
 	
@@ -191,7 +196,7 @@ public class DatabaseOperationsDAO {
 					int indexDuoDate = cursor.getColumnIndex(COLUMN_SPEND_DUO_DATE);
 					int indexIdInframe = cursor.getColumnIndex(COLUMN_ID_INFRAME);
 
-					int idSpend = cursor.getInt(indexIdInframe);
+					int idSpend = cursor.getInt(indexIdSpend);
 					String nameSpend = cursor.getString(indexNameSpend);
 					String descriptionSpend = cursor.getString(indexDescriptionSpend);
 					Double valueSpend = cursor.getDouble(indexValueSpend);
@@ -199,7 +204,7 @@ public class DatabaseOperationsDAO {
 					String payday = cursor.getString(indexPayDay);
 					String registerDay = cursor.getString(indexDateRegister);
 					String duoDate = cursor.getString(indexDuoDate);
-					int idInframeOnSpend = cursor.getInt(indexIdSpend);
+					int idInframeOnSpend = cursor.getInt(indexIdInframe);
 
 					Spends spend = new Spends(payday, descriptionSpend, nameSpend, null, 
 							constantlySpend, idInframeOnSpend, idSpend, valueSpend, registerDay, duoDate);
@@ -214,4 +219,16 @@ public class DatabaseOperationsDAO {
 		}
 		return spendList;
 	}
+	
+	/*public int getLastIdFromSpend() {
+		String queryReturnAll = new StringBuilder().append("SELECT ").append(COLUMN_ID_SPENDS).append(" FROM ").append(SPEND_TABLE).toString();
+		Cursor cursor = dataBase.rawQuery(queryReturnAll, null);
+		
+		if(cursor != null && cursor.getCount() > 0) {
+			cursor.moveToLast();
+			return cursor.getInt(0);
+		}
+		
+		return 0;
+	}*/
 }

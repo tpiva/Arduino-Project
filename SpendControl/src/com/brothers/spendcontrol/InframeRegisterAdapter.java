@@ -1,7 +1,9 @@
 package com.brothers.spendcontrol;
 
 import java.util.List;
+
 import com.brothers.spendcontrol.entities.Spends;
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,12 +22,30 @@ public class InframeRegisterAdapter extends ArrayAdapter<Spends> {
 	 * each list item layout ID
 	 */
 	private final int resourceId;
+	
+	private List<Spends> objects;
 
 	public InframeRegisterAdapter(Context context, int resource, List<Spends> objects) {
 		super(context, resource, objects);
 		this.inflater = LayoutInflater.from(context);
 		this.resourceId = resource;
+		this.objects = objects;
 	}
+	
+	@Override
+	public int getCount() {
+		return objects.size();
+	}
+	
+	@Override
+    public Spends getItem(int position) {
+    	return objects.get(position);
+    }
+	    
+	@Override
+    public long getItemId(int position) {
+    	return position;
+    }
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
