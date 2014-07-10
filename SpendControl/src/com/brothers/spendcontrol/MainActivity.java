@@ -67,7 +67,7 @@ public class MainActivity extends Activity {
 		buttonSpend.setEnabled(sucessInframeSave);
 
 		// show message of sucess
-		if (sucessInframeSave && !dontShowMessageOfSucess) {
+		if (!sucessInframeSave && dontShowMessageOfSucess) {
 			Toast messageSucessInframe = Toast.makeText(this, getResources()
 					.getString(R.string.sucess_save_inframe),
 					Toast.LENGTH_SHORT);

@@ -33,6 +33,7 @@ import android.widget.TextView;
 import com.brothers.spendcontrol.db.DatabaseOperationsDAO;
 import com.brothers.spendcontrol.entities.Inframe;
 import com.brothers.spendcontrol.entities.Spends;
+import com.brothers.spendcontrol.utils.Mask;
 
 @SuppressLint("SimpleDateFormat")
 public class SpendsActivity extends Activity {
@@ -57,8 +58,7 @@ public class SpendsActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				actualSpend = null;
-				Dialog dialog = onCreateDialog(actualBundle,dao);
-				dialog.show();
+				onCreateDialog(actualBundle,dao);
 			}
 
 		});
@@ -67,10 +67,11 @@ public class SpendsActivity extends Activity {
 	}
 	
 	private void updateListView(DatabaseOperationsDAO dao) {
-		/*if(spendsRegister != null) {
+		if(spendsRegister != null) {
 			spendsRegister.clear();
-		}*/
-		spendsRegister = dao.returnAllSpends();
+		}
+		//return all not pay spend
+		spendsRegister = dao.returnAllNotPaySpends();
 		
 		ArrayAdapter<Spends> adapter = new InframeRegisterAdapter(this, R.layout.list_inframe_item, spendsRegister);
 		ListView listView = (ListView) findViewById(R.id.list_view_inframe);
@@ -93,27 +94,30 @@ public class SpendsActivity extends Activity {
 	public boolean onContextItemSelected(MenuItem item) {  
 		final DatabaseOperationsDAO dao = DatabaseOperationsDAO.getInstance(this);
 		ListView listView = (ListView) findViewById(R.id.list_view_inframe);
-		AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();;
+		AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
 		
 		switch(item.getItemId()){  
 		case R.id.edit_inframe_item:  
 			actualSpend= (Spends) listView.getAdapter().getItem((int) info.position );  
-			Dialog dialog = onCreateDialog(actualBundle, dao);
-			dialog.show();
+			onCreateDialog(actualBundle, dao);
 			
 			return true;  
 		case R.id.delete_inframe_item:
 			Spends spendToDelete = (Spends) listView.getAdapter().getItem((int) info.position );
-			dialogOfDeleteSpend(spendToDelete,dao);
+			dialogOfConfirmationPayOrDeleteSpend(spendToDelete,dao,1);
 			return true;
+			
+		case R.id.pay_inframe_item:
+			Spends paySpend = (Spends) listView.getAdapter().getItem((int) info.position );
+			dialogOfConfirmationPayOrDeleteSpend(paySpend,dao,2);
+			return true;
+		
 		}  
 		return super.onContextItemSelected(item);  
 	}  
 
-	public Dialog onCreateDialog(Bundle savedInstanceState,final DatabaseOperationsDAO dao) {
+	public void onCreateDialog(Bundle savedInstanceState,final DatabaseOperationsDAO dao) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		
-		//TODO verificar senão esta sendo inserido valor null na data,nome ou valor para prevenir erros
 		
 		// Get the layout inflater
 		LayoutInflater inflater = this.getLayoutInflater();
@@ -124,6 +128,7 @@ public class SpendsActivity extends Activity {
 		final EditText inframeName = (EditText) layout.findViewById(R.id.inframe);
 		final EditText inframeValue = (EditText) layout.findViewById(R.id.value_inframe);
 		final EditText duoDateValue = (EditText) layout.findViewById(R.id.value_duoDate);
+		duoDateValue.addTextChangedListener(Mask.insert("##/##/####", duoDateValue));
 		
 		if(actualSpend != null) {
 			//TODO possible arrayIndexOfBounds
@@ -132,6 +137,7 @@ public class SpendsActivity extends Activity {
 			duoDateValue.setText(actualSpend.getDuoDate());
 		}
 
+		builder.setCancelable(false);
 		builder.setView(layout)
 		// Add action buttons
 		.setPositiveButton(actualSpend == null ? R.string.button_finish : 
@@ -143,23 +149,32 @@ public class SpendsActivity extends Activity {
 				
 				//get name of spend and value
 				String nameOfInframe = inframeName.getText().toString();
-				Double value = Double.valueOf(inframeValue.getText().toString());				
 				String duoDate = duoDateValue.getText().toString();
+				String valueInString = inframeValue.getText().toString();
+				Double value = 0.0;
 				
-				//create a new spend to save on bd
-				Spends newSpend = null;
-				if(actualSpend == null) {
-					newSpend = new Spends(null, null, nameOfInframe, null, null, inframe.getId(), /*dao.getLastIdFromSpend() + 1,*/ value, CURRENT_DATE, duoDate);
-					dao.saveSpends(newSpend);
-				} else {
-					newSpend = new Spends(null, null, nameOfInframe, null, null, inframe.getId(), actualSpend.getIdSpends(), 
-							value, CURRENT_DATE, duoDate);
-					dao.updateSpend(newSpend);
+				//all strings never be null
+				if(!valueInString.equals("")){
+					value = Double.valueOf(inframeValue.getText().toString());			
 				}
-				updateListView(dao);				
-				programNotification(duoDate); 
 				
-			}
+				//if some value is null show message for user
+				//TODO show error while all is null
+				//if(!nameOfInframe.equals("") && !value.equals(0.0) && duoDateValue.equals("")) {
+					//create a new spend to save on bd
+					Spends newSpend = null;
+					if(actualSpend == null) {
+						newSpend = new Spends("false", null, nameOfInframe, null, null, inframe.getId(), value, CURRENT_DATE, duoDate);
+						dao.saveSpends(newSpend);
+					} else {
+						newSpend = new Spends("false", null, nameOfInframe, null, null, inframe.getId(), actualSpend.getIdSpends(), 
+								value, CURRENT_DATE, duoDate);
+						dao.updateSpend(newSpend);
+					}
+					updateListView(dao);				
+					programNotification(duoDate); 
+				} 
+			//}
 
 			
 		})
@@ -169,18 +184,28 @@ public class SpendsActivity extends Activity {
 				dialog.dismiss();
 			}
 		});      
-		return builder.create();
+		
+		Dialog dialog = builder.create();
+		dialog.show();
 	}
 	
-	private void dialogOfDeleteSpend(final Spends forDelete,final DatabaseOperationsDAO dao) {
+	private void dialogOfConfirmationPayOrDeleteSpend(final Spends forDeleteOrUpdate,final DatabaseOperationsDAO dao,final int option) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage(getResources().getString(R.string.delete_spend_information));
+		builder.setMessage(getResources().getString(option == 1 ? R.string.delete_spend_information : 
+			R.string.pay_spend_information));
         builder.setCancelable(true);
         builder.setPositiveButton(getResources().getString(R.string.ok),
                 new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-            	//delete from database
-            	dao.deleteSpend(forDelete);
+            	if(option == 1) {
+            		//delete from database
+            		dao.deleteSpend(forDeleteOrUpdate);
+            	} else {
+            		//update spend and remove from listview
+            		//using now payday for true or false (it set send pay or not pay)
+            		forDeleteOrUpdate.setPayDay("true");
+            		dao.updateSpend(forDeleteOrUpdate);
+            	}
             	updateListView(dao);
             }
         });

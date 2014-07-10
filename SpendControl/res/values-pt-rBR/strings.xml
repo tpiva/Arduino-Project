@@ -30,6 +30,11 @@
     <!-- Menu inframe listview -->
     <string name="edit_item_inframe">Editar</string>
     <string name="delete_item_inframe">Deletar</string>
+    <string name="pay_item_inframe">Pagar</string>
 	<string name="delete_spend_information">Deseja realmente deletar essa despesa?</string>
+	<string name="pay_spend_information">Confirmar pagamento da despesa?</string>
+	
+	<!-- Error and informations messages -->
+	<string name="error_values_nulls_spend">Preencha todos os campos da despesa.</string>
 	
 </resources>

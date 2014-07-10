@@ -6,4 +6,7 @@
     <item
         android:id="@+id/delete_inframe_item"
         android:title="@string/delete_item_inframe"/>
+    <item
+        android:id="@+id/pay_inframe_item"
+        android:title="@string/pay_item_inframe"/>
 </menu>

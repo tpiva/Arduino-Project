@@ -147,6 +147,15 @@ public class DatabaseOperationsDAO {
 		return spends;
 	}
 	
+	public List<Spends> returnAllNotPaySpends() {
+		String queryReturnAll = new StringBuilder().append("SELECT * FROM ").append(SPEND_TABLE).append(" WHERE ").append(COLUMN_PAYDAY)
+													.append(" = ").append(" 'false' OR NULL").toString();
+		Cursor cursor = dataBase.rawQuery(queryReturnAll, null);
+		List<Spends> spends = buildCursorSpend(cursor);
+
+		return spends;
+	}
+	
 	private List<Inframe> buildCursorInframe(Cursor cursor) {
 		List<Inframe> inframes = new ArrayList<Inframe>();
 		if(cursor == null)
