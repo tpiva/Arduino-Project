@@ -23,7 +23,7 @@ public class PersisteHelper extends SQLiteOpenHelper {
 
 	@Override
 	public void onCreate(SQLiteDatabase db) {
-		db.execSQL(DatabaseOperationsDAO.CREATE_TABLE_INFRAME);
+//		db.execSQL(DatabaseOperationsDAO.CREATE_TABLE_INFRAME);
 		db.execSQL(DatabaseOperationsDAO.CREATE_TABLE_SPEND);
 	}
 

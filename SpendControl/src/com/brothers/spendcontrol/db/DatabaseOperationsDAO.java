@@ -38,9 +38,17 @@ public class DatabaseOperationsDAO {
 			+ SPEND_TABLE + "(" + COLUMN_ID_SPENDS
 			+ " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL ," + COLUMN_NAME_OF_SPEND + " TEXT," + COLUMN_DESCRIPTION + " TEXT," 
 			+ COLUMN_SPEND_VALUE + " REAL," + COLUMN_CONSTANTLY_SPEND + " TEXT," + COLUMN_PAYDAY + " TEXT," 
+			+ COLUMN_ID_INFRAME + " INTEGER," + COLUMN_SPEND_DATE_REGISTER + " TEXT," + COLUMN_SPEND_DUO_DATE + " TEXT " + ")";
+
+	/*
+	 * With foreign key.
+	 * public static final String CREATE_TABLE_SPEND = "CREATE TABLE "
+			+ SPEND_TABLE + "(" + COLUMN_ID_SPENDS
+			+ " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL ," + COLUMN_NAME_OF_SPEND + " TEXT," + COLUMN_DESCRIPTION + " TEXT," 
+			+ COLUMN_SPEND_VALUE + " REAL," + COLUMN_CONSTANTLY_SPEND + " TEXT," + COLUMN_PAYDAY + " TEXT," 
 			+ COLUMN_ID_INFRAME + " INTEGER," + COLUMN_SPEND_DATE_REGISTER + " TEXT," + COLUMN_SPEND_DUO_DATE + " TEXT," + "FOREIGN KEY(" + COLUMN_ID_INFRAME + ") REFERENCES " 
 			+ INFRAME_TABLE + "(" + COLUMN_ID_INFRAME + ")" + ")";
-
+	 */
 
 	private SQLiteDatabase dataBase = null;
 	private static DatabaseOperationsDAO instance;
@@ -96,7 +104,7 @@ public class DatabaseOperationsDAO {
 		values.put(COLUMN_SPEND_VALUE, spends.getValue());
 		values.put(COLUMN_CONSTANTLY_SPEND, spends.getConstantlySpend());
 		values.put(COLUMN_PAYDAY, spends.getPayDay());
-		values.put(COLUMN_ID_INFRAME, spends.getIdInframe());
+//		values.put(COLUMN_ID_INFRAME, spends.getIdInframe());
 		values.put(COLUMN_SPEND_DATE_REGISTER, spends.getDateRegister());
 		values.put(COLUMN_SPEND_DUO_DATE, spends.getDuoDate());
 		
@@ -110,7 +118,7 @@ public class DatabaseOperationsDAO {
 		values.put(COLUMN_SPEND_VALUE, spends.getValue());
 		values.put(COLUMN_CONSTANTLY_SPEND, spends.getConstantlySpend());
 		values.put(COLUMN_PAYDAY, spends.getPayDay());
-		values.put(COLUMN_ID_INFRAME, spends.getIdInframe());
+//		values.put(COLUMN_ID_INFRAME, spends.getIdInframe());
 		values.put(COLUMN_SPEND_DATE_REGISTER, spends.getDateRegister());
 		values.put(COLUMN_SPEND_DUO_DATE, spends.getDuoDate());
 		
@@ -203,7 +211,7 @@ public class DatabaseOperationsDAO {
 					int indexPayDay = cursor.getColumnIndex(COLUMN_PAYDAY);
 					int indexDateRegister = cursor.getColumnIndex(COLUMN_SPEND_DATE_REGISTER);
 					int indexDuoDate = cursor.getColumnIndex(COLUMN_SPEND_DUO_DATE);
-					int indexIdInframe = cursor.getColumnIndex(COLUMN_ID_INFRAME);
+//					int indexIdInframe = cursor.getColumnIndex(COLUMN_ID_INFRAME);
 
 					int idSpend = cursor.getInt(indexIdSpend);
 					String nameSpend = cursor.getString(indexNameSpend);
@@ -213,10 +221,10 @@ public class DatabaseOperationsDAO {
 					String payday = cursor.getString(indexPayDay);
 					String registerDay = cursor.getString(indexDateRegister);
 					String duoDate = cursor.getString(indexDuoDate);
-					int idInframeOnSpend = cursor.getInt(indexIdInframe);
+//					int idInframeOnSpend = cursor.getInt(indexIdInframe);
 
 					Spends spend = new Spends(payday, descriptionSpend, nameSpend, null, 
-							constantlySpend, idInframeOnSpend, idSpend, valueSpend, registerDay, duoDate);
+							constantlySpend, null, idSpend, valueSpend, registerDay, duoDate);
 
 					spendList.add(spend);
 

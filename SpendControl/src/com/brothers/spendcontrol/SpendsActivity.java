@@ -31,7 +31,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.brothers.spendcontrol.db.DatabaseOperationsDAO;
-import com.brothers.spendcontrol.entities.Inframe;
 import com.brothers.spendcontrol.entities.Spends;
 import com.brothers.spendcontrol.utils.Mask;
 
@@ -145,7 +144,7 @@ public class SpendsActivity extends Activity {
 			@Override
 			public void onClick(DialogInterface dialog, int id) {
 				//it's absolute right an exist inframe register.
-				Inframe inframe = dao.returnAllInframes().get(0);
+//				Inframe inframe = dao.returnAllInframes().get(0);
 				
 				//get name of spend and value
 				String nameOfInframe = inframeName.getText().toString();
@@ -164,10 +163,10 @@ public class SpendsActivity extends Activity {
 					//create a new spend to save on bd
 					Spends newSpend = null;
 					if(actualSpend == null) {
-						newSpend = new Spends("false", null, nameOfInframe, null, null, inframe.getId(), value, CURRENT_DATE, duoDate);
+						newSpend = new Spends("false", null, nameOfInframe, null, null, null, value, CURRENT_DATE, duoDate);
 						dao.saveSpends(newSpend);
 					} else {
-						newSpend = new Spends("false", null, nameOfInframe, null, null, inframe.getId(), actualSpend.getIdSpends(), 
+						newSpend = new Spends("false", null, nameOfInframe, null, null, null, actualSpend.getIdSpends(), 
 								value, CURRENT_DATE, duoDate);
 						dao.updateSpend(newSpend);
 					}

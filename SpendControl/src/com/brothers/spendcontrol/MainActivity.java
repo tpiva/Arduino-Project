@@ -1,6 +1,5 @@
 package com.brothers.spendcontrol;
 
-import java.util.List;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -8,10 +7,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.Toast;
-
-import com.brothers.spendcontrol.db.DatabaseOperationsDAO;
-import com.brothers.spendcontrol.entities.Inframe;
 
 public class MainActivity extends Activity {
 
@@ -20,13 +15,15 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		final Button buttonSpend = (Button) findViewById(R.id.button_spend);
-		final Button buttonInframe = (Button) findViewById(R.id.button_inframe);
+//		final Button buttonInframe = (Button) findViewById(R.id.button_inframe);
 
 		// database object
-		DatabaseOperationsDAO dao = DatabaseOperationsDAO
-				.getInstance(getApplicationContext());
+		/*DatabaseOperationsDAO dao = DatabaseOperationsDAO
+				.getInstance(getApplicationContext());*/
 
-		buttonInframe.setOnClickListener(new OnClickListener() {
+		/*
+		 * It'll be used in the future
+		 * buttonInframe.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
@@ -35,9 +32,9 @@ public class MainActivity extends Activity {
 				startActivity(intentInframe);
 			}
 
-		});
+		});*/
 
-		buttonSpend.setOnClickListener(new OnClickListener() {
+		 buttonSpend.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
@@ -49,7 +46,9 @@ public class MainActivity extends Activity {
 		});
 
 		// verify if option can be show for user.
-		boolean sucessInframeSave = false;
+		/* It'll be used in the future;
+		 * 
+		 * boolean sucessInframeSave = false;
 
 		// if bd have inframe than release ui components
 		List<Inframe> inframe = dao.returnAllInframes();
@@ -72,6 +71,6 @@ public class MainActivity extends Activity {
 					.getString(R.string.sucess_save_inframe),
 					Toast.LENGTH_SHORT);
 			messageSucessInframe.show();
-		}
+		}*/
 	}
 }
