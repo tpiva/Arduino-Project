@@ -12,7 +12,7 @@ void setup(){
 
   void loop(){
 
-    for(int x = 0; x < 180; x++){
+    for(int x = 0; x < 180; x++){ // play with multiplex with some leds.
 
       sinVal = (sin(x*(3.1416/180)));
       ledVal = int(sinVal * 255);
