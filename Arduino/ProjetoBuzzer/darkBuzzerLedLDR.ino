@@ -4,6 +4,7 @@
 //a escuridão chega uma sirene soa (Buzzer) e as luzes piscam
 //sem parar, nesse caso os dois leds. Entretanto quand a escuridão
 //esta se aproximando o Buzzer bipa apenas e um único Led pisca (LedAlert).
+//Hardware squetch on darkBuzzerLedLDR_HardwareSquetch.jpg in same folder of code
 
 int pinBuzzer = 9;
 int pinLedOk = 10;
