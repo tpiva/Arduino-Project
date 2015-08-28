@@ -1,1 +1,40 @@
+# Morse code for arduino
+Morse code with Arduino UNO R3, the "heavy" configuration is on code. It's an brief explanation of project, _code_ [Morse Code](https://github.com/tpiva/Arduino-UNO-R3-Project/blob/master/Arduino/ProjetoMorse/morseCodeInterpretador.ino) has more details on **comments**.
+## Hardware configuration
+- Protoboard 
+- LED
+- Arduino UNO R3
 
+**It's basically an siply HW configuration for turn on/off led**
+
+## Code 
+Morse code is basically compose by DOT and DASH, it'll use the time between elements, characters and work as document on site: [Nu Code](http://www.nu-ware.com/NuCode%20Help/index.html?morse_code_structure_and_timing_.htm)
+
+Code works from user input, base on _Serial_ instruction of Arduino, that choice an word or letter to transmite by Morse code. After it, code translate (**switch** code) each character into Morse code (_DOT_ and _DASH_ - basically elements of Morse code):
+
+```
+void translateCharSequenceIntoMorseCode(char morseSequence[], int sizeofCharArray) {
+//more code here
+switch (charOfSequence) {
+      case 'a': // .-
+        dotElement();
+        turnOffLedToElement();
+        dashElement();
+        digitalWrite(pinLed, LOW);
+        break;
+        //more code here
+  }
+```
+
+if an word will be translate, **default** code of switch translate into _pause between characters_, if not translate each characters. 
+
+```
+//more code
+default:
+        // pause between characters
+        delay(pause2Characters);
+        break;
+//more code
+```
+
+**PS:** Time of duration of delay, to turn off/on led, is set by me, you can change it. This delay is resposible to separate each element of Morse code.
