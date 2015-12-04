@@ -1,5 +1,5 @@
 # Morse code for arduino
-Morse code with Arduino UNO R3, the "heavy" configuration is on code. It's an brief explanation of project, _code_ [Morse Code](https://github.com/tpiva/Arduino-UNO-R3-Project/blob/master/Arduino/ProjetoMorse/morseCodeInterpretador.ino) has more details on **comments**.
+Morse code with Arduino UNO R3, the **core** of configuration is on code. It's an brief explanation of project, _code_ [Morse Code](https://github.com/tpiva/Arduino-UNO-R3-Project/blob/master/Arduino/ProjetoMorse/morseCodeInterpretador.ino) has more details on **comments**.
 ## Hardware configuration
 - Protoboard 
 - LED
